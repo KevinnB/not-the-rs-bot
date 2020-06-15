@@ -19,8 +19,12 @@ module.exports = {
           value: 'Replies with pong as required.',
         },
         {
-          name: `${process.env.prefix}rsn`,
+          name: `${process.env.prefix}rsn <rsn>`,
           value: 'Assigns your RSN to your discord account.',
+        },
+        {
+          name: `${process.env.prefix}lookup <rsn>`,
+          value: 'Looks up user on the high scores.',
         }
       );
 

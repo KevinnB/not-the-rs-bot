@@ -1,16 +1,17 @@
 const { hiscores } = require('osrs-api');
+const Discord = require('discord.js');
 
-const { HELPER } = require('../configuration');
+const { THEME, HELPER } = require('../configuration');
 
 const logger = HELPER.logger;
 const ERROR = HELPER.ERROR;
 const generateError = HELPER.generateError;
 
 module.exports = {
-  name: 'rsn',
-  description: 'A assignment of rsn -> discord user',
+  name: 'lookup',
+  description: 'A lookup for a users rsn',
   aliases: [],
-  usage: '!rsn',
+  usage: '!lookup',
   cooldown: 5,
   async execute(message, { users }, args) {
     try {
@@ -30,10 +31,12 @@ module.exports = {
           return;
         }
 
-        logger.log(`rsn ${user.name} set for user`, message.author.id);
-        await users.set(message.author.id, { name: user.name });
+        message.reply(createHighScoresCard(user));
+        logger.log(`rsn ${user.name} returned`);
       } catch (e) {
         if (e.response.status === 404) {
+          logger.error(`${username} not found in osrs highscores.`);
+
           message.reply(generateError(ERROR.USER_NOT_FOUND));
           return;
         }
@@ -45,3 +48,20 @@ module.exports = {
     }
   },
 };
+
+function createHighScoresCard(account) {
+  const message = new Discord.MessageEmbed()
+    .setTitle(account.name)
+    .setDescription('User highscores')
+    .setAuthor(THEME.BOT_NAME, THEME.IMAGE_URL)
+    .setTimestamp()
+    .setColor(THEME.MESSAGE_COLOR);
+
+  Object.keys(account).map((key) => {
+    if (HELPER.NO_XP_ACCOUNT_FIELDS.indexOf(key) === -1 && account[key].level) {
+      message.addField(key, account[key].level);
+    }
+  });
+
+  return message;
+}

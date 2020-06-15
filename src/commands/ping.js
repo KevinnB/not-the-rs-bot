@@ -1,15 +1,19 @@
-module.exports = {
-    name: 'ping',
-	description: 'A Simple ping / pong interaction',
-	aliases: ['!p'],
-	usage: '!ping',
-	cooldown: 5,
-	async execute(message, { users }, args) {
-        try {
-            message.reply('pong');
+const { HELPER } = require('../configuration');
 
-        } catch (e) {
-            console.error(e);
-        }
-	},
+const logger = HELPER.logger;
+
+module.exports = {
+  name: 'ping',
+  description: 'A Simple ping / pong interaction',
+  aliases: [],
+  usage: '!ping',
+  cooldown: 5,
+  async execute(message, { users }, args) {
+    try {
+      logger.log('pong');
+      message.reply('pong');
+    } catch (e) {
+      console.error(e);
+    }
+  },
 };
