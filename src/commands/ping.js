@@ -1,7 +1,15 @@
 module.exports = {
-	name: 'ping',
+    name: 'ping',
 	description: 'A Simple ping / pong interaction',
-	execute(message, args) {
-		message.reply('pong');
+	aliases: ['!p'],
+	usage: '!ping',
+	cooldown: 5,
+	async execute(message, { users }, args) {
+        try {
+            message.reply('pong');
+
+        } catch (e) {
+            console.error(e);
+        }
 	},
 };
